@@ -15,5 +15,6 @@ def get_video_il(url):
     else:
         print(f'Это не Reel')
 
-
-get_video_il(url)
+while True:
+    url = input('Enter url')
+    get_video_il(url)
