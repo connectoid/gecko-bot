@@ -13,9 +13,9 @@ cl.login(USERNAME, PASSWORD)
 def get_video_il(url):
     if 'reel' in url:
         id = cl.media_pk_from_url(url)
-        sleep(2)
+        # sleep(2)
         media_info = cl.media_info(id)
-        sleep(2)
+        # sleep(2)
         video_url = media_info.video_url
         # video_url = cl.media_info(id).video_url
         # cl.video_download_by_url(video_url, folder='/video')
