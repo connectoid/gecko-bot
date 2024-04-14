@@ -5,9 +5,6 @@ from instagrapi import Client
 import yt_dlp
 
 
-USERNAME = 'beleysasha'
-PASSWORD = 's028006000434'
-
 urls = [
     'https://www.instagram.com/reel/C5lwbPYIzMs/?igsh=MTNiNml5bGV2aXk3ZA==',
     'https://www.instagram.com/reel/C4WiPb3vNX3/?igsh=N2ZsdXhob25vbmh6',
@@ -25,8 +22,6 @@ urls = [
 
 def get_video_instagrapi(url):
     cl = Client()
-    cl.login(USERNAME, PASSWORD)
-
 
     if 'reel' in url:
         id = cl.media_pk_from_url(url)
@@ -56,6 +51,7 @@ def get_video_ytdl(url):
 
 for url in urls:
     time1 = datetime.now()
-    video_url = get_video_ytdl(url)
+    # video_url = get_video_ytdl(url)
+    video_url = get_video_instagrapi(url)
     time2 = datetime.now()
     print(f'Video url: {video_url}\nDownloaded by {time2 - time1} sec')
