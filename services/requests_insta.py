@@ -124,7 +124,11 @@ def get_video_url(url):
     if response_json:
         try:
             video_url = response_json['data']['xdt_shortcode_media']['video_url']
-            return video_url
+            if video_url:
+                return video_url
+            else:
+                print(f'* * * Неизвестная ошибка получения ссылки на видео')
+                return None
         except Exception as e:
             print(f'* * * Ошибка получения ссылки на видео из ответа: {e}')
             return None
