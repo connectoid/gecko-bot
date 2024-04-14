@@ -3,7 +3,12 @@ from time import sleep
 
 from instagrapi import Client
 
+USERNAME = 'beleysasha'
+PASSWORD = 's028006000434'
+
+
 cl = Client()
+cl.login(USERNAME, PASSWORD)
 
 def get_video_il(url):
     if 'reel' in url:
