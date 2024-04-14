@@ -7,7 +7,7 @@ cl = Client()
 def get_video_il(url):
     if 'reel' in url:
         id = cl.media_pk_from_url(url)
-        video_url = cl.media_info(1913256444155036809).video_url
+        video_url = cl.media_info(id).video_url
         cl.video_download_by_url(video_url, folder='/video')
         return video_url
     else:
