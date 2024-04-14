@@ -2,6 +2,8 @@ from datetime import datetime
 from time import sleep
 
 from instagrapi import Client
+import yt_dlp
+
 
 USERNAME = 'beleysasha'
 PASSWORD = 's028006000434'
@@ -23,7 +25,7 @@ urls = [
 cl = Client()
 cl.login(USERNAME, PASSWORD)
 
-def get_video_il(url):
+def get_video_instagrapi(url):
     if 'reel' in url:
         id = cl.media_pk_from_url(url)
         # sleep(2)
@@ -37,9 +39,22 @@ def get_video_il(url):
         print(f'Это не Reel')
         return None
 
+
+def get_video_ytdl(url):
+    if 'reel' in url:
+        ydl_opts = {}
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            video_url = info.url
+        return video_url
+    else:
+        print(f'Это не Reel')
+        return None
+
+
 for url in urls:
     # url = input('Enter url: ')
     time1 = datetime.now()
-    video_url = get_video_il(url)
+    video_url = get_video_ytdl(url)
     time2 = datetime.now()
     print(f'Video url: {video_url}\nDownloaded by {time2 - time1} sec')
