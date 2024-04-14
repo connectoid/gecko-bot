@@ -36,9 +36,11 @@ async def content_type_example(message: Message):
     video_url = get_video_url(url)
     time_end = datetime.now()
     if video_url:
+        print('Ссылка на видео полуена в Хэндлере')
         await message.send_video(message.chat.id, video_url)
         await message.answer(text=f'Время на получение ссылки на видео: {time_end - time_start}')
     else:
+        print('Ссылка на видео НЕ полуена в Хэндлере')
         await message.answer(text='Ошибка получения ссылки на видео (см. логи)')
 
 
