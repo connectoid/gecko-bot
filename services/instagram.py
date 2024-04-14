@@ -22,10 +22,12 @@ urls = [
     'https://www.instagram.com/reel/C4pOp6LoWOA/?igsh=MTU0NnIzNWdpdGVwZg==',
 ]
 
-cl = Client()
-cl.login(USERNAME, PASSWORD)
 
 def get_video_instagrapi(url):
+    cl = Client()
+    cl.login(USERNAME, PASSWORD)
+
+
     if 'reel' in url:
         id = cl.media_pk_from_url(url)
         # sleep(2)
@@ -53,7 +55,6 @@ def get_video_ytdl(url):
 
 
 for url in urls:
-    # url = input('Enter url: ')
     time1 = datetime.now()
     video_url = get_video_ytdl(url)
     time2 = datetime.now()
