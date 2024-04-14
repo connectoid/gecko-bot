@@ -75,5 +75,6 @@ for url in urls:
     time1 = datetime.now()
     response = requests.post(url='https://www.instagram.com/graphql/query', headers=headers, data=data)
     time2 = datetime.now()
+    print(response.json())
     video_url = response.json()['data']['xdt_shortcode_media']['video_url']
     print(f'Video url: {video_url}\nDownloaded by {time2 - time1} sec')
