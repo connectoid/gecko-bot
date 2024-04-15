@@ -16,6 +16,7 @@ from lexicon.lexicon_en import (LEXICON_HELP, START_MESSAGE,
                                 TARIFF_BUTTON)
 from lexicon.lexicon import MESSAGE, BUTTON, TARIFF, BROADCAST
 from keyboards.commands_menu import set_commands_menu
+from keyboards.inline_keyboards import create_bottom_keyboard
 from config_data.config import Config, load_config
 from utils.utils import send_to_admin
 from filters.user_type import IsAdminFilter
@@ -29,22 +30,42 @@ config: Config = load_config()
 lang = 'ru'
 switch_reporting = True
 
+methods_buttons = [
+    'selenium',
+    'requests',
+    'instagrapi',
+    'instaload',
+    'hikerAPI'
+]
+
 config: Config = load_config()
 bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
 
 @router.message(F.text.contains('instagram.com/reel/'))
 async def content_type_example(message: Message):
-    time_start = datetime.now()
     url = message.text
-    video_url = get_video_instagrapi(url)
+    print(url)
+    shortcode = url.split('/reel/')[1].split('/')[0]
+    await message.answer(text='Выберите метод получения ссылки на видео',
+                         reply_markup=create_bottom_keyboard(methods_buttons, shortcode))
+    
+
+@router.callback_query(Text(startswith='requests'))
+async def process_requests_method(callback: CallbackQuery, bot: Bot):
+    time_start = datetime.now()
+    shortcode = callback.data.split(' ')[-1]
+    print(shortcode)
+    caption, video_url = get_video_url(shortcode)
+    video_url = video_url[:50]
     time_end = datetime.now()
     if video_url:
+        print(video_url)
         print('Ссылка на видео полуена в Хэндлере')
         # await bot.send_video(message.chat.id, video=video_url)
-        await message.answer(text=f'Время на получение ссылки {video_url} на видео: {time_end - time_start}')
+        await callback.message.answer(text=f'Время на получение ссылки {video_url} на видео: {time_end - time_start}')
     else:
         print('Ссылка на видео НЕ полуена в Хэндлере')
-        await message.answer(text='Ошибка получения ссылки на видео (см. логи)')
+        await callback.message.answer(text='Ошибка получения ссылки на видео (см. логи)')
 
 
 @router.message(CommandStart(), StateFilter(default_state))

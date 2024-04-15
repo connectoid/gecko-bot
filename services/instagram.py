@@ -51,9 +51,9 @@ random_account = random.choice(accounts)
 USERNAME = random_account.split(':')[0]
 PASSWORD = random_account.split(':')[1]
 
-cl = Client()
-cl.login(USERNAME, PASSWORD)
-cl.dump_settings("session.json")
+# cl = Client()
+# cl.login(USERNAME, PASSWORD)
+# cl.dump_settings("session.json")
 
 def login_user():
     """
