@@ -57,9 +57,9 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
     video_url = get_video_selenium(shortcode)
-    video_url = video_url[:50]
-    time_end = datetime.now()
     if video_url:
+        video_url = video_url[:50]
+        time_end = datetime.now()
         print(video_url)
         print('Ссылка на видео полуена в Хэндлере')
         # await bot.send_video(message.chat.id, video=video_url)
@@ -75,9 +75,9 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
     caption, video_url = get_video_requests(shortcode)
-    video_url = video_url[:50]
-    time_end = datetime.now()
     if video_url:
+        video_url = video_url[:50]
+        time_end = datetime.now()
         print(video_url)
         print('Ссылка на видео полуена в Хэндлере')
         # await bot.send_video(message.chat.id, video=video_url)
@@ -93,9 +93,9 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
     video_url = get_video_instagrapi(shortcode)
-    video_url = video_url[:50]
-    time_end = datetime.now()
     if video_url:
+        video_url = video_url[:50]
+        time_end = datetime.now()
         print(video_url)
         print('Ссылка на видео полуена в Хэндлере')
         # await bot.send_video(message.chat.id, video=video_url)
