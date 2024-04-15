@@ -43,6 +43,8 @@ def get_random_proxy():
     return proxies
 
 def send_request_for_reel(url):
+    max_retries = 3
+    retry_number = 0
     endpoint = 'https://www.instagram.com/graphql/query'
     if 'reel' in url:
         try:
@@ -103,7 +105,7 @@ def send_request_for_reel(url):
             proxies = get_random_proxy()
             print(proxies)
             response = requests.post(endpoint, proxies=proxies, headers=headers, data=data)
-            if response.status_code == 200:
+            if response.status_code != 200:
                 try:
                     response_json = response.json()
                     return response_json
@@ -122,8 +124,13 @@ def send_request_for_reel(url):
 
 
 def get_caption_from_json(json_data):
-    caption = json_data['data']['xdt_shortcode_media']['edge_media_to_caption']['edges'][0]['node']['text']
-    return caption
+    try:
+        caption = json_data['data']['xdt_shortcode_media']['edge_media_to_caption']['edges'][0]['node']['text']
+        return caption
+    except Exception as e:
+        print(f'* * * Ошибка получения заголовка из json: {e}')
+        return 'No caption'
+
 
 
 def get_video_url(url):

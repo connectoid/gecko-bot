@@ -20,6 +20,7 @@ from config_data.config import Config, load_config
 from utils.utils import send_to_admin
 from filters.user_type import IsAdminFilter
 from services.requests_insta import get_video_url
+from services.instagram import get_video_instagrapi
 
 storage = MemoryStorage()
 router = Router()
@@ -36,11 +37,11 @@ bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
 async def content_type_example(message: Message):
     time_start = datetime.now()
     url = message.text
-    caption, video_url = get_video_url(url)
+    video_url = get_video_instagrapi(url)
     time_end = datetime.now()
     if video_url:
         print('Ссылка на видео полуена в Хэндлере')
-        await bot.send_video(message.chat.id, video=video_url, caption=caption)
+        await bot.send_video(message.chat.id, video=video_url)
         await message.answer(text=f'Время на получение ссылки на видео: {time_end - time_start}')
     else:
         print('Ссылка на видео НЕ полуена в Хэндлере')

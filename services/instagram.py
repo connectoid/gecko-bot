@@ -1,8 +1,8 @@
 from datetime import datetime
 from time import sleep
+import random
 
 from instagrapi import Client
-import yt_dlp
 
 
 urls = [
@@ -19,17 +19,42 @@ urls = [
     'https://www.instagram.com/reel/C4pOp6LoWOA/?igsh=MTU0NnIzNWdpdGVwZg==',
 ]
 
+proxy_list = [
+    'http://LJ64PB:2FeTxb@94.131.19.56:9701',
+    'http://LJ64PB:2FeTxb@95.164.201.179:9911',
+    'http://LJ64PB:2FeTxb@95.164.202.85:9327',
+    'http://LJ64PB:2FeTxb@94.131.54.35:9085',
+    'http://LJ64PB:2FeTxb@186.179.61.133:9579',
+    'http://LJ64PB:2FeTxb@91.218.50.161:9997',
+    'http://LJ64PB:2FeTxb@38.153.57.53:9190',
+    'http://LJ64PB:2FeTxb@38.152.246.128:9310',
+    'http://LJ64PB:2FeTxb@94.131.87.20:9548',
+    'http://LJ64PB:2FeTxb@94.131.89.115:9108',
+    'http://zuQ205:Khmw7T@147.45.93.10:8000',
+]
+
+def get_random_proxy():
+    proxy = random.choice(proxy_list)
+    proxies = {
+        'http': proxy,
+        'https': proxy,
+    }
+    return proxy
+
 
 def get_video_instagrapi(url):
+    print(f'Запрошена ссылка {url}')
     cl = Client()
-
+    proxy = get_random_proxy()
+    cl.set_proxy(proxy)
+    cl.delay_range = [1, 3]
     if 'reel' in url:
+        print('getting id')
         id = cl.media_pk_from_url(url)
-        # sleep(2)
+        print('getting media info')
         media_info = cl.media_info(id)
-        # sleep(2)
+        print('getting video_url')
         video_url = media_info.video_url
-        # video_url = cl.media_info(id).video_url
         # cl.video_download_by_url(video_url, folder='/video')
         return video_url
     else:
@@ -37,21 +62,9 @@ def get_video_instagrapi(url):
         return None
 
 
-def get_video_ytdl(url):
-    if 'reel' in url:
-        ydl_opts = {}
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            video_url = info.url
-        return video_url
-    else:
-        print(f'Это не Reel')
-        return None
-
-
-for url in urls:
-    time1 = datetime.now()
-    # video_url = get_video_ytdl(url)
-    video_url = get_video_instagrapi(url)
-    time2 = datetime.now()
-    print(f'Video url: {video_url}\nDownloaded by {time2 - time1} sec')
+# for url in urls:
+#     time1 = datetime.now()
+#     # video_url = get_video_ytdl(url)
+#     video_url = get_video_instagrapi(url)
+#     time2 = datetime.now()
+#     print(f'Video url: {video_url}\nDownloaded by {time2 - time1} sec')
