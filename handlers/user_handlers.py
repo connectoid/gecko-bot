@@ -36,8 +36,7 @@ methods_buttons = [
     'selenium',
     'requests',
     'instagrapi',
-    'instaload',
-    'hikerAPI'
+    'hikerAPI',
 ]
 
 config: Config = load_config()
