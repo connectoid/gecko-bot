@@ -34,15 +34,19 @@ proxy_list = [
     'http://zuQ205:Khmw7T@147.45.93.10:8000',
 ]
 
+USERNAME = 'beleysasha'
+PASSWORD = 's028006000434'
 
+cl = Client()
+cl.login(USERNAME, PASSWORD)
+cl.dump_settings("session.json")
 
 def login_user():
     """
     Attempts to login to Instagram using either the provided session information
     or the provided username and password.
     """
-    USERNAME = 'beleysasha'
-    PASSWORD = 's028006000434'
+    
 
     cl = Client()
     session = cl.load_settings("session.json")
