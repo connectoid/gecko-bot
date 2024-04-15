@@ -133,7 +133,7 @@ def get_caption_from_json(json_data):
 
 
 
-def get_video_url(shortcode):
+def get_video_requests(shortcode):
     print(f'Запрошено видео по ссылке {shortcode}')
     response_json = send_request_for_reel(shortcode)
     if response_json:

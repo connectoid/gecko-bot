@@ -49,7 +49,9 @@ def generate_random_name():
     return random_name
 
 
-def get_video(html):
+def get_video_selenium(shortcode):
+    url = f'https://www.instagram.com/reel/{shortcode}/'
+    html = get_html(url)
     soup = BeautifulSoup(html, features="html.parser")
     try:
         video = soup.find('video')
@@ -102,12 +104,12 @@ def get_html(url):
                 return False
             
 
-for url in urls:
-    time1 = datetime.now()
-    html = get_html(url)
-    video_url = get_video(html)
-    # save_source_to_file(html)
-    # file_name = generate_random_name() + '.mp4'
-    # download_file_from_url(video_url, file_name, 'video')
-    time2 = datetime.now()
-    print(f'Video url: {video_url}\nDownloaded by {time2 - time1} sec')
+# for url in urls:
+#     time1 = datetime.now()
+#     html = get_html(url)
+#     video_url = get_video(html)
+#     # save_source_to_file(html)
+#     # file_name = generate_random_name() + '.mp4'
+#     # download_file_from_url(video_url, file_name, 'video')
+#     time2 = datetime.now()
+#     print(f'Video url: {video_url}\nDownloaded by {time2 - time1} sec')

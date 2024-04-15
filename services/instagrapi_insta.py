@@ -36,22 +36,24 @@ proxy_list = [
 
 accounts = [
     'garciamargaretdjtpwm:d6F0wht8',
-    'perezjoseph7htr5d:QivSw7XdDUj',
-    'lewisjamesm7g4lk:l6dzEEHUWva',
-    'robinsondavidrku769:mb7JVkYg',
-    'collinsjasonuzd151:Xckqx0mMCPv',
-    'phillipslaurambaqec:t497PUcjZPB',
-    'rodriguezdeborahnjj5re:cugw5df8vE',
-    'mooremariamrj47f:BQDFWdRCt',
-    'younggeorgeycmkyg:vSSignd5',
-    'moorelaurarplpqk:4ybN4wgtIaz',
+    # 'perezjoseph7htr5d:QivSw7XdDUj',
+    # 'lewisjamesm7g4lk:l6dzEEHUWva',
+    # 'robinsondavidrku769:mb7JVkYg',
+    # 'collinsjasonuzd151:Xckqx0mMCPv',
+    # 'phillipslaurambaqec:t497PUcjZPB',
+    # 'rodriguezdeborahnjj5re:cugw5df8vE',
+    # 'mooremariamrj47f:BQDFWdRCt',
+    # 'younggeorgeycmkyg:vSSignd5',
+    # 'moorelaurarplpqk:4ybN4wgtIaz',
 ]
 
-random_account = random.choice(accounts)
-USERNAME = random_account.split(':')[0]
-PASSWORD = random_account.split(':')[1]
+# random_account = random.choice(accounts)
+# USERNAME = random_account.split(':')[0]
+# PASSWORD = random_account.split(':')[1]
 
-# cl = Client()
+
+
+cl = Client()
 # cl.login(USERNAME, PASSWORD)
 # cl.dump_settings("session.json")
 
@@ -116,15 +118,14 @@ def get_random_proxy():
     return proxy
 
 
-def get_video_instagrapi(url):
-    print(f'Запрошена ссылка {url}')
-    cl = login_user()
+def get_video_instagrapi(shortcode):
+    print(f'Запрошена ссылка {shortcode}')
     proxy = get_random_proxy()
     cl.set_proxy(proxy)
     cl.delay_range = [1, 3]
-    if 'reel' in url:
+    if True:
         print('getting id')
-        id = cl.media_pk_from_url(url)
+        id = cl.media_pk_from_code(shortcode)
         print('getting media info')
         try:
             media_info = cl.media_info(id)

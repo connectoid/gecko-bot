@@ -20,8 +20,9 @@ from keyboards.inline_keyboards import create_bottom_keyboard
 from config_data.config import Config, load_config
 from utils.utils import send_to_admin
 from filters.user_type import IsAdminFilter
-from services.requests_insta import get_video_url
-from services.instagram import get_video_instagrapi
+from services.requests_insta import get_video_requests
+from services.instagrapi_insta import get_video_instagrapi
+from services.selenium_insta import get_video_selenium
 
 storage = MemoryStorage()
 router = Router()
@@ -50,12 +51,48 @@ async def content_type_example(message: Message):
                          reply_markup=create_bottom_keyboard(methods_buttons, shortcode))
     
 
+@router.callback_query(Text(startswith='selenium'))
+async def process_requests_method(callback: CallbackQuery, bot: Bot):
+    time_start = datetime.now()
+    shortcode = callback.data.split(' ')[-1]
+    print(shortcode)
+    caption, video_url = get_video_selenium(shortcode)
+    video_url = video_url[:50]
+    time_end = datetime.now()
+    if video_url:
+        print(video_url)
+        print('Ссылка на видео полуена в Хэндлере')
+        # await bot.send_video(message.chat.id, video=video_url)
+        await callback.message.answer(text=f'Время на получение ссылки {video_url} на видео: {time_end - time_start}')
+    else:
+        print('Ссылка на видео НЕ полуена в Хэндлере')
+        await callback.message.answer(text='Ошибка получения ссылки на видео (см. логи)')
+    
+
 @router.callback_query(Text(startswith='requests'))
 async def process_requests_method(callback: CallbackQuery, bot: Bot):
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
-    caption, video_url = get_video_url(shortcode)
+    caption, video_url = get_video_requests(shortcode)
+    video_url = video_url[:50]
+    time_end = datetime.now()
+    if video_url:
+        print(video_url)
+        print('Ссылка на видео полуена в Хэндлере')
+        # await bot.send_video(message.chat.id, video=video_url)
+        await callback.message.answer(text=f'Время на получение ссылки {video_url} на видео: {time_end - time_start}')
+    else:
+        print('Ссылка на видео НЕ полуена в Хэндлере')
+        await callback.message.answer(text='Ошибка получения ссылки на видео (см. логи)')
+
+
+@router.callback_query(Text(startswith='instagrapi'))
+async def process_requests_method(callback: CallbackQuery, bot: Bot):
+    time_start = datetime.now()
+    shortcode = callback.data.split(' ')[-1]
+    print(shortcode)
+    video_url = get_video_instagrapi(shortcode)
     video_url = video_url[:50]
     time_end = datetime.now()
     if video_url:
