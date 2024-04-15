@@ -23,6 +23,7 @@ from filters.user_type import IsAdminFilter
 from services.requests_insta import get_video_requests
 from services.instagrapi_insta import get_video_instagrapi
 from services.selenium_insta import get_video_selenium
+from services.hikerapi_insta import get_video_hikerapi
 
 storage = MemoryStorage()
 router = Router()
@@ -89,10 +90,29 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
 
 @router.callback_query(Text(startswith='instagrapi'))
 async def process_requests_method(callback: CallbackQuery, bot: Bot):
+    await callback.message.answer(text='Дождитесь ответа, не отправляйте следующую ссылку пока не прийдет ответ')
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
     video_url = get_video_instagrapi(shortcode)
+    if video_url:
+        video_url = video_url[:50]
+        time_end = datetime.now()
+        print(video_url)
+        print('Ссылка на видео полуена в Хэндлере')
+        # await bot.send_video(message.chat.id, video=video_url)
+        await callback.message.answer(text=f'Время на получение ссылки {video_url} на видео: {time_end - time_start}')
+    else:
+        print('Ссылка на видео НЕ полуена в Хэндлере')
+        await callback.message.answer(text='Ошибка получения ссылки на видео (login_required)')
+
+
+@router.callback_query(Text(startswith='hikerAPI'))
+async def process_requests_method(callback: CallbackQuery, bot: Bot):
+    time_start = datetime.now()
+    shortcode = callback.data.split(' ')[-1]
+    print(shortcode)
+    video_url = get_video_hikerapi(shortcode)
     if video_url:
         video_url = video_url[:50]
         time_end = datetime.now()
