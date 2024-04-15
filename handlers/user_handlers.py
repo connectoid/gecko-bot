@@ -102,7 +102,7 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
         await callback.message.answer(text=f'Время на получение ссылки {video_url} на видео: {time_end - time_start}')
     else:
         print('Ссылка на видео НЕ полуена в Хэндлере')
-        await callback.message.answer(text='Ошибка получения ссылки на видео (см. логи)')
+        await callback.message.answer(text='Ошибка получения ссылки на видео (login_required)')
 
 
 @router.message(CommandStart(), StateFilter(default_state))

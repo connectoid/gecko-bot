@@ -111,16 +111,16 @@ def send_request_for_reel(shortcode):
                     return response_json
                 except Exception as e:
                     print(f'* * * Ошибка получения json из ответа: {e}')
-                    return None
+                    return False
             else:
                 print(f'* * * Ошибка получения ответа, статус код: {response.status_code}')
-                return None
+                return False
         except Exception as e:
             print(f'* * * Ошибка получения shortcode из ссылки: {e}')
-            return None
+            return False
     else:
         print(f'* * * Ссылка непраильная (не Reel)')
-        return None
+        return False
 
 
 def get_caption_from_json(json_data):
@@ -149,10 +149,10 @@ def get_video_requests(shortcode):
                 return None
         except Exception as e:
             print(f'* * * Ошибка получения ссылки на видео из ответа: {e}')
-            return None
+            return False
     else:
         print(f'* * * json не получен')
-        return None
+        return False
 
 # for url in urls:
 #     time1 = datetime.now()

@@ -135,7 +135,7 @@ def get_video_instagrapi(shortcode):
             return video_url
         except Exception as e:
             print(f'Error of getting media info: {e}')
-            return None
+            return False
     else:
         print(f'Это не Reel')
         return None
