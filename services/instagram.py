@@ -34,7 +34,7 @@ proxy_list = [
     'http://zuQ205:Khmw7T@147.45.93.10:8000',
 ]
 
-USERNAME = 'beleysasha'
+USERNAME = 'beleysasha@gmail.com'
 PASSWORD = 's028006000434'
 
 cl = Client()
