@@ -127,6 +127,7 @@ def get_caption_from_json(json_data):
 
 
 def get_video_url(url):
+    print(f'Запрошено видео по ссылке {url}')
     response_json = send_request_for_reel(url)
     if response_json:
         try:
