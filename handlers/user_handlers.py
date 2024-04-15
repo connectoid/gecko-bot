@@ -26,6 +26,8 @@ storage = MemoryStorage()
 router = Router()
 config: Config = load_config()
 
+username = 'beleysasha'
+password = 's028006000434'
 
 lang = 'ru'
 switch_reporting = True

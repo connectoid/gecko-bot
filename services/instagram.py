@@ -3,6 +3,7 @@ from time import sleep
 import random
 
 from instagrapi import Client
+from instagrapi.exceptions import LoginRequired
 
 
 urls = [
@@ -33,6 +34,57 @@ proxy_list = [
     'http://zuQ205:Khmw7T@147.45.93.10:8000',
 ]
 
+
+
+def login_user():
+    """
+    Attempts to login to Instagram using either the provided session information
+    or the provided username and password.
+    """
+    USERNAME = 'beleysasha'
+    PASSWORD = 's028006000434'
+
+    cl = Client()
+    session = cl.load_settings("session.json")
+
+    login_via_session = False
+    login_via_pw = False
+
+    if session:
+        try:
+            cl.set_settings(session)
+            cl.login(USERNAME, PASSWORD)
+
+            # check if session is valid
+            try:
+                cl.get_timeline_feed()
+            except LoginRequired:
+                print("Session is invalid, need to login via username and password")
+
+                old_session = cl.get_settings()
+
+                # use the same device uuids across logins
+                cl.set_settings({})
+                cl.set_uuids(old_session["uuids"])
+
+                cl.login(USERNAME, PASSWORD)
+            login_via_session = True
+            return cl
+        except Exception as e:
+            print("Couldn't login user using session information: %s" % e)
+
+    if not login_via_session:
+        try:
+            print("Attempting to login via username and password. username: %s" % USERNAME)
+            if cl.login(USERNAME, PASSWORD):
+                login_via_pw = True
+        except Exception as e:
+            print("Couldn't login user using username and password: %s" % e)
+
+    if not login_via_pw and not login_via_session:
+        raise Exception("Couldn't login user with either password or session")
+
+
 def get_random_proxy():
     proxy = random.choice(proxy_list)
     proxies = {
@@ -44,7 +96,7 @@ def get_random_proxy():
 
 def get_video_instagrapi(url):
     print(f'Запрошена ссылка {url}')
-    cl = Client()
+    cl = login_user()
     proxy = get_random_proxy()
     cl.set_proxy(proxy)
     cl.delay_range = [1, 3]
