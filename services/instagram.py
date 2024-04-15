@@ -34,8 +34,22 @@ proxy_list = [
     'http://zuQ205:Khmw7T@147.45.93.10:8000',
 ]
 
-USERNAME = 'beleysasha@gmail.com'
-PASSWORD = 's028006000434'
+accounts = [
+    'garciamargaretdjtpwm:d6F0wht8',
+    'perezjoseph7htr5d:QivSw7XdDUj',
+    'lewisjamesm7g4lk:l6dzEEHUWva',
+    'robinsondavidrku769:mb7JVkYg',
+    'collinsjasonuzd151:Xckqx0mMCPv',
+    'phillipslaurambaqec:t497PUcjZPB',
+    'rodriguezdeborahnjj5re:cugw5df8vE',
+    'mooremariamrj47f:BQDFWdRCt',
+    'younggeorgeycmkyg:vSSignd5',
+    'moorelaurarplpqk:4ybN4wgtIaz',
+]
+
+random_account = random.choice(accounts)
+USERNAME = random_account.split(':')[0]
+PASSWORD = random_account.split(':')[1]
 
 cl = Client()
 cl.login(USERNAME, PASSWORD)
@@ -70,6 +84,10 @@ def login_user():
                 # use the same device uuids across logins
                 cl.set_settings({})
                 cl.set_uuids(old_session["uuids"])
+                
+                random_account = random.choice(accounts)
+                USERNAME = random_account.split(':')[0]
+                PASSWORD = random_account.split(':')[1]
 
                 cl.login(USERNAME, PASSWORD)
             login_via_session = True
