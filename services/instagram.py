@@ -52,11 +52,15 @@ def get_video_instagrapi(url):
         print('getting id')
         id = cl.media_pk_from_url(url)
         print('getting media info')
-        media_info = cl.media_info(id)
-        print('getting video_url')
-        video_url = media_info.video_url
-        # cl.video_download_by_url(video_url, folder='/video')
-        return video_url
+        try:
+            media_info = cl.media_info(id)
+            print('getting video_url')
+            video_url = media_info.video_url
+            # cl.video_download_by_url(video_url, folder='/video')
+            return video_url
+        except Exception as e:
+            print(f'Error of getting media info: {e}')
+            return None
     else:
         print(f'Это не Reel')
         return None
