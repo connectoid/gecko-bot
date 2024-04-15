@@ -29,18 +29,18 @@ config: Config = load_config()
 lang = 'ru'
 switch_reporting = True
 
-# config: Config = load_config()
-# bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+config: Config = load_config()
+bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
 
 @router.message(F.text.contains('instagram.com/reel/'))
 async def content_type_example(message: Message):
     time_start = datetime.now()
     url = message.text
-    video_url = get_video_url(url)
+    caption, video_url = get_video_url(url)
     time_end = datetime.now()
     if video_url:
         print('Ссылка на видео полуена в Хэндлере')
-        # await bot.send_video(message.chat.id, video_url)
+        await bot.send_video(message.chat.id, video=video_url, caption=caption)
         await message.answer(text=f'Время на получение ссылки на видео: {time_end - time_start}')
     else:
         print('Ссылка на видео НЕ полуена в Хэндлере')

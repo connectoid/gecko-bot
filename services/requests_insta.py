@@ -3,6 +3,7 @@ import random
 from datetime import datetime
 from pprint import pprint
 
+from utils.utils import save_json
 
 urls = [
     'https://www.instagram.com/reel/C5lwbPYIzMs/?igsh=MTNiNml5bGV2aXk3ZA==',
@@ -119,13 +120,22 @@ def send_request_for_reel(url):
         print(f'* * * Ссылка непраильная (не Reel)')
         return None
 
+
+def get_caption_from_json(json_data):
+    caption = json_data['data']['xdt_shortcode_media']['edge_media_to_caption']['edges'][0]['node']['text']
+    return caption
+
+
 def get_video_url(url):
     response_json = send_request_for_reel(url)
     if response_json:
         try:
+            save_json(response_json)
+            caption = get_caption_from_json(response_json)
+            print(caption)
             video_url = response_json['data']['xdt_shortcode_media']['video_url']
             if video_url:
-                return video_url
+                return caption, video_url
             else:
                 print(f'* * * Неизвестная ошибка получения ссылки на видео')
                 return None
