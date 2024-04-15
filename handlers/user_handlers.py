@@ -56,7 +56,7 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
-    caption, video_url = get_video_selenium(shortcode)
+    video_url = get_video_selenium(shortcode)
     video_url = video_url[:50]
     time_end = datetime.now()
     if video_url:
