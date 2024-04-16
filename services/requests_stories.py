@@ -60,7 +60,7 @@ def get_stories(url):
     }
 
     proxies = get_random_proxy()
-    response = requests.post('https://v3.saveig.app/api/ajaxSearch', proxies==proxies, data=data)
+    response = requests.post('https://v3.saveig.app/api/ajaxSearch', proxies=proxies, data=data)
     if response.status_code == 200:
         # source = html.unescape(response.text)
         json_source = response.json()
