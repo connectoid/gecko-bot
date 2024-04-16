@@ -143,7 +143,7 @@ def get_video_requests(shortcode):
             print(caption)
             video_url = response_json['data']['xdt_shortcode_media']['video_url']
             if video_url:
-                return caption, video_url
+                return video_url
             else:
                 print(f'* * * Неизвестная ошибка получения ссылки на видео')
                 return None

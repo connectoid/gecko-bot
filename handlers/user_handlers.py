@@ -35,7 +35,7 @@ switch_reporting = True
 methods_buttons = [
     'selenium',
     'requests',
-    # 'instagrapi',
+    'video-requests',
     'hikerAPI',
 ]
 
@@ -46,6 +46,7 @@ bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
 async def content_type_example(message: Message):
     url = message.text
     print(url)
+    print(message.chat.id)
     shortcode = url.split('/reel/')[1].split('/')[0]
     await message.answer(text='Выберите метод получения ссылки на видео',
                          reply_markup=create_bottom_keyboard(methods_buttons, shortcode))
@@ -74,7 +75,7 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
-    caption, video_url = get_video_requests(shortcode)
+    video_url = get_video_requests(shortcode)
     if video_url:
         video_url = video_url[:50]
         time_end = datetime.now()
@@ -82,6 +83,25 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
         print('Ссылка на видео полуена в Хэндлере')
         # await bot.send_video(message.chat.id, video=video_url)
         await callback.message.answer(text=f'Время на получение ссылки {video_url} на видео: {time_end - time_start}')
+    else:
+        print('Ссылка на видео НЕ полуена в Хэндлере')
+        await callback.message.answer(text='Ошибка получения ссылки на видео (см. логи)')
+
+
+@router.callback_query(Text(startswith='video-requests'))
+async def process_requests_method(callback: CallbackQuery, bot: Bot):
+    time_start = datetime.now()
+    shortcode = callback.data.split(' ')[-1]
+    print(shortcode)
+    video_url = get_video_requests(shortcode)
+    if video_url:
+        video_url_cut = video_url[:50]
+        time_end = datetime.now()
+        print(video_url)
+        print('Ссылка на видео полуена в Хэндлере')
+        print(f'chat id 2: {callback.message.chat.id}')
+        await bot.send_video(callback.message.chat.id, video=video_url)
+        await callback.message.answer(text=f'Время на получение ссылки {video_url_cut} на видео: {time_end - time_start}')
     else:
         print('Ссылка на видео НЕ полуена в Хэндлере')
         await callback.message.answer(text='Ошибка получения ссылки на видео (см. логи)')
