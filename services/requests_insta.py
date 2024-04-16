@@ -31,7 +31,6 @@ proxy_list = [
     'http://LJ64PB:2FeTxb@38.152.246.128:9310',
     'http://LJ64PB:2FeTxb@94.131.87.20:9548',
     'http://LJ64PB:2FeTxb@94.131.89.115:9108',
-    # 'http://zuQ205:Khmw7T@147.45.93.10:8000',
 ]
 
 def get_random_proxy():
