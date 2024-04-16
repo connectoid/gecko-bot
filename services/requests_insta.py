@@ -146,7 +146,7 @@ def get_video_requests(shortcode):
                 return video_url
             else:
                 print(f'* * * Неизвестная ошибка получения ссылки на видео')
-                return None
+                return False
         except Exception as e:
             print(f'* * * Ошибка получения ссылки на видео из ответа: {e}')
             return False
