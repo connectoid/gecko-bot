@@ -103,7 +103,7 @@ def send_request_for_reel(shortcode):
                 'doc_id': '24852649951017035',
             }
             proxies = get_random_proxy()
-            # print(proxies)
+            print(proxies)
             response = requests.post(endpoint, proxies=proxies, headers=headers, data=data)
             if response.status_code == 200:
                 try:
@@ -128,7 +128,7 @@ def get_caption_from_json(json_data):
         caption = json_data['data']['xdt_shortcode_media']['edge_media_to_caption']['edges'][0]['node']['text']
         return caption
     except Exception as e:
-        print(f'* * * Ошибка получения заголовка из json: {e}')
+        print(f'* * * Ошибка получения заголовка видео из json: {e}')
         return 'No caption'
 
 
