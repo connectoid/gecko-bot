@@ -35,7 +35,7 @@ switch_reporting = True
 methods_buttons = [
     'selenium',
     'requests',
-    'instagrapi',
+    # 'instagrapi',
     'hikerAPI',
 ]
 
