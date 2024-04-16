@@ -49,7 +49,7 @@ def send_request_for_reel(shortcode):
     url = f'https://www.instagram.com/reel/{shortcode}/'
     if 'reel' in url:
         try:
-            print(shortcode)
+            # print(shortcode)
             headers = {
             'accept': '*/*',
             'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',
@@ -103,7 +103,7 @@ def send_request_for_reel(shortcode):
                 'doc_id': '24852649951017035',
             }
             proxies = get_random_proxy()
-            print(proxies)
+            # print(proxies)
             response = requests.post(endpoint, proxies=proxies, headers=headers, data=data)
             if response.status_code == 200:
                 try:
@@ -134,13 +134,13 @@ def get_caption_from_json(json_data):
 
 
 def get_video_requests(shortcode):
-    print(f'Запрошено видео по ссылке {shortcode}')
+    # print(f'Запрошено видео по ссылке {shortcode}')
     response_json = send_request_for_reel(shortcode)
     if response_json:
         try:
             save_json(response_json)
             caption = get_caption_from_json(response_json)
-            print(caption)
+            # print(caption)
             video_url = response_json['data']['xdt_shortcode_media']['video_url']
             if video_url:
                 return video_url
