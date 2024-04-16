@@ -70,10 +70,10 @@ success_count = fail_count = 0
 for count in range(1, 101):
     url = random.choice(urls)
     shortcode = url.split('/reel/')[1].split('/')[0]
-    interval = random.randint(1, 2)
+    interval = random.randint(3, 4)
     video_url = get_video_requests(shortcode)
     if video_url:
-        print(f'{count}. Ссылка {video_url[:20]} получена удачно. Ждем {interval} сек.')
+        print(f'{count}. Ссылка {video_url[:50]} получена удачно. Ждем {interval} сек.')
         sleep(interval)
         success_count += 1
     else:
