@@ -20,11 +20,11 @@ from keyboards.inline_keyboards import create_bottom_keyboard
 from config_data.config import Config, load_config
 from utils.utils import send_to_admin
 from filters.user_type import IsAdminFilter
-from services.requests_insta import get_video_requests
-from services.instagrapi_insta import get_video_instagrapi
-from services.selenium_insta import get_video_selenium
-from services.hikerapi_insta import get_video_hikerapi
-from services.requests_stories import get_stories
+from services.instagram.reels.reels_requests import get_video_requests
+from services.instagram.reels.reels_instagrapi import get_video_instagrapi
+from services.instagram.reels.reels_selenium import get_video_selenium
+from services.instagram.reels.reels_hikerapi import get_video_hikerapi
+from services.instagram.stories.stories_requests import get_stories
 
 storage = MemoryStorage()
 router = Router()
@@ -34,7 +34,6 @@ lang = 'ru'
 switch_reporting = True
 
 methods_buttons = [
-    'selenium',
     'requests',
     'video-requests',
     'hikerAPI',

@@ -2,11 +2,25 @@ from urllib.parse import unquote
 import html
 import json
 import random
+from time import sleep
 
 import requests
 from bs4 import BeautifulSoup
 
-# url = 'https://www.instagram.com/stories/evgen_10_n/3347273781465142918?igsh=MXhjZDQ3Y3FoOWZsZw=='
+stories_list = [
+    'https://www.instagram.com/stories/m_galustyan/3347459925515336431?igsh=MWloc2Nyb20xZmw5cg==',
+    'https://www.instagram.com/stories/zhanna_baybakova/3347414385355279132?igsh=NWxwNGgweGg5YzE3',
+    'https://www.instagram.com/stories/video_positivo/3347310065365455440?igsh=eHI0NGZnOTNlbjZv',
+    'https://www.instagram.com/stories/amocucinare/3347535227843930565?igsh=a3FudHo2bWxsZjQ0',
+    'https://www.instagram.com/stories/hideo_kojima/3347568644770709475?igsh=Yzl1eXNpNGI0N3Rm',
+    'https://www.instagram.com/stories/kaliningradru/3347285678625082096?igsh=MWwzdHBrZTFrZHFpZg==',
+    'https://www.instagram.com/stories/svinto4ek/3347651887459934594?igsh=YXNjOHpzcThvZ2Zx',
+    'https://www.instagram.com/stories/igor_birdsandwhales/3347424286581534293?igsh=cHBiMXhoajF6ano5',
+    'https://www.instagram.com/stories/newredko/3347562155736520789?igsh=eXcxcDVnMWl6dGt3',
+    'https://www.instagram.com/stories/evgeny_kulik/3347354978811278805?igsh=ZWJza2NzNDlmMW12',
+    'https://www.instagram.com/stories/tri_taranki/3347565942814099893?igsh=dm82czMwZ29nNGQ0',
+    ]
+
 proxy_list = [
     'http://LJ64PB:2FeTxb@94.131.19.56:9701',
     'http://LJ64PB:2FeTxb@95.164.201.179:9911',
@@ -20,6 +34,8 @@ proxy_list = [
     'http://LJ64PB:2FeTxb@94.131.89.115:9108',
 ]
 
+proxy_waiting_list = []
+
 def get_random_proxy():
     proxy = random.choice(proxy_list)
     proxies = {
@@ -28,13 +44,9 @@ def get_random_proxy():
     }
     return proxies
 
-def save_source_to_file(text):
-    with open('source.html', 'w') as file:
-        file.write(text)
-
-def save_json(response, file='data.json'):
-    with open(f'{file}', 'w', encoding='utf-8') as f:
-        json.dump(response, f, ensure_ascii=False)
+def get_random_story():
+    story = random.choice(stories_list)
+    return story
 
 
 def get_stories(url):
@@ -62,13 +74,10 @@ def get_stories(url):
     proxies = get_random_proxy()
     response = requests.post('https://v3.saveig.app/api/ajaxSearch', proxies=proxies, data=data)
     if response.status_code == 200:
-        # source = html.unescape(response.text)
         json_source = response.json()
-        # save_json(json_source)
         try:
             html_data = json_source['data']
             unesqaped_html_data = html.unescape(html_data)
-            # save_source_to_file(unesqaped_html_data)
             soup = BeautifulSoup(unesqaped_html_data, 'lxml')
             downloads_ul = soup.find('ul', class_='download-box')
             download_divs = downloads_ul.find_all('div', class_='download-items__btn')
@@ -80,3 +89,27 @@ def get_stories(url):
     else:
         print(f'Request error: {response.status_code}')
         return False
+
+
+def main():
+    success_count = fail_count = 0
+    for count in range(1, 101):
+        url = random.choice(stories_list)
+        interval = random.randint(1, 2)
+        download_links = get_stories(url)
+        if download_links:
+            print(f'{count}. Сторис {download_links[0][:50]} получены удачно. Ждем {interval} сек.')
+            sleep(interval)
+            success_count += 1
+        else:
+            print(f'{count}. Сторис не получены. Ждем {interval} сек.')
+            sleep(interval)
+            fail_count += 1
+
+    print(f'Удачных: {success_count} Неудачных: {fail_count}')
+    print(f'Список живых прокси: {proxy_list}')
+    print(f'Список ожидаемых прокси: {proxy_waiting_list}')
+
+
+if __name__ == '__main__':
+    main()
