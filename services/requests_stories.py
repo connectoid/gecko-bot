@@ -65,14 +65,18 @@ def get_stories(url):
         # source = html.unescape(response.text)
         json_source = response.json()
         # save_json(json_source)
-        html_data = json_source['data']
-        unesqaped_html_data = html.unescape(html_data)
-        # save_source_to_file(unesqaped_html_data)
-        soup = BeautifulSoup(unesqaped_html_data, 'lxml')
-        downloads_ul = soup.find('ul', class_='download-box')
-        download_divs = downloads_ul.find_all('div', class_='download-items__btn')
-        download_links = [div.find('a')['href'] for div in download_divs]
-        return download_links
+        try:
+            html_data = json_source['data']
+            unesqaped_html_data = html.unescape(html_data)
+            # save_source_to_file(unesqaped_html_data)
+            soup = BeautifulSoup(unesqaped_html_data, 'lxml')
+            downloads_ul = soup.find('ul', class_='download-box')
+            download_divs = downloads_ul.find_all('div', class_='download-items__btn')
+            download_links = [div.find('a')['href'] for div in download_divs]
+            return download_links
+        except Exception as e:
+            print(f'Ошибка получения JSON в сторис, возможно неверная ссылка: {e}')
+            return False
     else:
         print(f'Request error: {response.status_code}')
         return False
