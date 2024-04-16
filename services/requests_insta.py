@@ -137,7 +137,7 @@ def get_video_requests(shortcode):
     response_json = send_request_for_reel(shortcode)
     if response_json:
         try:
-            save_json(response_json)
+            # save_json(response_json)
             caption = get_caption_from_json(response_json)
             # print(caption)
             video_url = response_json['data']['xdt_shortcode_media']['video_url']

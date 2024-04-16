@@ -24,6 +24,7 @@ from services.requests_insta import get_video_requests
 from services.instagrapi_insta import get_video_instagrapi
 from services.selenium_insta import get_video_selenium
 from services.hikerapi_insta import get_video_hikerapi
+from services.requests_stories import get_stories
 
 storage = MemoryStorage()
 router = Router()
@@ -43,7 +44,7 @@ config: Config = load_config()
 bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
 
 @router.message(F.text.contains('instagram.com/reel/'))
-async def content_type_example(message: Message):
+async def content_reels_requested(message: Message):
     url = message.text
     print(url)
     print(message.chat.id)
@@ -52,8 +53,28 @@ async def content_type_example(message: Message):
                          reply_markup=create_bottom_keyboard(methods_buttons, shortcode))
     
 
+@router.message(F.text.contains('instagram.com/stories/'))
+async def content_stories_requested(message: Message):
+    time_start = datetime.now()
+    url = message.text
+    author = url.split('/stories/')[-1].split('/')[0]
+    author = f'@{author}'
+    print(f'Stories requested {url}')
+    print(message.chat.id)
+    stories_urls = get_stories(url)
+    if stories_urls:
+        for story_url in stories_urls:
+            await bot.send_video(
+                message.chat.id,
+                video=story_url,
+                caption=author)
+        time_end = datetime.now()
+        await message.answer(text=f'Время на получение всех Stories: {time_end - time_start}')
+    else:
+        await message.answer(text='Ошибка получения Stories, см. логи.')
+
 @router.callback_query(Text(startswith='selenium'))
-async def process_requests_method(callback: CallbackQuery, bot: Bot):
+async def process_selenium_method(callback: CallbackQuery, bot: Bot):
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
@@ -89,7 +110,7 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
 
 
 @router.callback_query(Text(startswith='video-requests'))
-async def process_requests_method(callback: CallbackQuery, bot: Bot):
+async def process_requests_videos_method(callback: CallbackQuery, bot: Bot):
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
@@ -108,7 +129,7 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
 
 
 @router.callback_query(Text(startswith='instagrapi'))
-async def process_requests_method(callback: CallbackQuery, bot: Bot):
+async def process_instagrapi_method(callback: CallbackQuery, bot: Bot):
     await callback.message.answer(text='Дождитесь ответа, не отправляйте следующую ссылку пока не прийдет ответ')
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
@@ -127,7 +148,7 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
 
 
 @router.callback_query(Text(startswith='hikerAPI'))
-async def process_requests_method(callback: CallbackQuery, bot: Bot):
+async def process_hikerapi_method(callback: CallbackQuery, bot: Bot):
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
     print(shortcode)
