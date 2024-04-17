@@ -180,11 +180,11 @@ def send_request_for_reel(shortcode):
 
 def main():
     success_count = fail_count = 0
+    count = 1
     time_start = datetime.now()
     while (datetime.now() - time_start) < timedelta(minutes=60):
     # for count in range(1, 101):
         print(f'Time Delta: {datetime.now() - time_start}')
-        count = 1
         url = random.choice(urls)
         shortcode = url.split('/reel/')[1].split('/')[0]
         interval = random.randint(1, 10)
