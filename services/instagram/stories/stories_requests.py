@@ -6,6 +6,9 @@ import random
 import requests
 from bs4 import BeautifulSoup
 
+from config_data.config import proxy_list
+
+
 stories_list = [
     'https://www.instagram.com/stories/m_galustyan/3347459925515336431?igsh=MWloc2Nyb20xZmw5cg==',
     'https://www.instagram.com/stories/zhanna_baybakova/3347414385355279132?igsh=NWxwNGgweGg5YzE3',
@@ -20,18 +23,6 @@ stories_list = [
     'https://www.instagram.com/stories/tri_taranki/3347565942814099893?igsh=dm82czMwZ29nNGQ0',
     ]
 
-proxy_list = [
-    'http://LJ64PB:2FeTxb@94.131.19.56:9701',
-    'http://LJ64PB:2FeTxb@95.164.201.179:9911',
-    'http://LJ64PB:2FeTxb@95.164.202.85:9327',
-    'http://LJ64PB:2FeTxb@94.131.54.35:9085',
-    'http://LJ64PB:2FeTxb@186.179.61.133:9579',
-    'http://LJ64PB:2FeTxb@91.218.50.161:9997',
-    'http://LJ64PB:2FeTxb@38.153.57.53:9190',
-    'http://LJ64PB:2FeTxb@38.152.246.128:9310',
-    'http://LJ64PB:2FeTxb@94.131.87.20:9548',
-    'http://LJ64PB:2FeTxb@94.131.89.115:9108',
-]
 
 def get_random_proxy():
     proxy = random.choice(proxy_list)

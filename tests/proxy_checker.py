@@ -6,6 +6,7 @@ from datetime import timedelta
 
 from config_data.config import proxy_list
 
+
 urls = [
     'https://www.instagram.com/reel/C5lwbPYIzMs/?igsh=MTNiNml5bGV2aXk3ZA==',
     'https://www.instagram.com/reel/C4WiPb3vNX3/?igsh=N2ZsdXhob25vbmh6',
@@ -71,8 +72,6 @@ urls = [
 ]
 
 
-proxy_waiting_list = []
-
 def get_random_proxy():
     proxy = random.choice(proxy_list)
     proxies = {
@@ -81,118 +80,107 @@ def get_random_proxy():
     }
     return proxies
 
-def send_request_for_reel(shortcode):
+def send_request_for_reel(shortcode, proxies):
     endpoint = 'https://www.instagram.com/graphql/query'
     url = f'https://www.instagram.com/reel/{shortcode}/'
-    if 'reel' in url:
-        try:
-            # print(shortcode)
-            headers = {
-            'accept': '*/*',
-            'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',
-            'content-type': 'application/x-www-form-urlencoded',
-            'dpr': '2',
-            'origin': 'https://www.instagram.com',
-            'referer': f'{url}',
-            'sec-ch-prefers-color-scheme': 'dark',
-            'sec-ch-ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
-            'sec-ch-ua-full-version-list': '"Google Chrome";v="123.0.6312.58", "Not:A-Brand";v="8.0.0.0", "Chromium";v="123.0.6312.58"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-model': '""',
-            'sec-ch-ua-platform': '"macOS"',
-            'sec-ch-ua-platform-version': '"14.2.0"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-origin',
-            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-            'viewport-width': '830',
-            'x-asbd-id': '129477',
-            'x-bloks-version-id': '2c91cd96c82784f84faaa4f7ee527407cd84c826a2d53f6e3ab87e8e69502b86',
-            'x-csrftoken': 'h9WVZwuIpfEKXZ0hdqgFqeLJglBGP6WO',
-            'x-fb-friendly-name': 'PolarisPostActionLoadPostQueryQuery',
-            'x-fb-lsd': 'AVqCy1FViKw',
-            'x-ig-app-id': '936619743392459',
-            }
-            data = {
-                'av': '0',
-                '__d': 'www',
-                '__user': '0',
-                '__a': '1',
-                '__req': '5',
-                '__hs': '19827.HYP:instagram_web_pkg.2.1..0.0',
-                'dpr': '2',
-                '__ccg': 'UNKNOWN',
-                '__rev': '1012773657',
-                '__s': '::027l1c',
-                # '__hsi': '7357850965805043412',
-                # '__dyn': '7xeUjG1mxu1syUbFp40NonwgU29zEdF8aUco2qwJw5ux609vCwjE1xoswaq0yE7i0n24oaEd86a3a1YwBgao6C0Mo2iyo2Ixe0EUjwGzEaE7622362W2K0zK5o4q3y1Sx-0iS2Sq2-azo7u1xwIwbS1LwTwKG1pg2Xwr86C1mwrd6goK68jxe6V89F8uxK3Oq',
-                # '__csr': 'g8iNcn8ADiHquDbQWpqJkKil8F4_yt4V-XhbJeKezqBDLV8zxiuqaDhHAJeXCBXKiu4VaHxeJprUx2qgGaFBjzkXLBx1osh8Cifz_ybperz9ESvzVrGWy8lyVqgy74GwzCw05iXa5E4S1rw23oG4JwBg0c69VQajpE4C2Czj0befg0UC0cJCkM0gg8it2E11EO00wH80VC',
-                '__comet_req': '7',
-                'lsd': 'AVqCy1FViKw',
-                'jazoest': '2956',
-                '__spin_r': '1012773657',
-                '__spin_b': 'trunk',
-                '__spin_t': '1713133176',
-                'fb_api_caller_class': 'RelayModern',
-                'fb_api_req_friendly_name': 'PolarisPostActionLoadPostQueryQuery',
-                'variables': f'{{"shortcode":"{shortcode}","fetch_comment_count":40,"parent_comment_count":24,"child_comment_count":3,"fetch_like_count":10,"fetch_tagged_user_count":null,"fetch_preview_comment_count":2,"has_threaded_comments":true,"hoisted_comment_id":null,"hoisted_reply_id":null}}',
-                'server_timestamps': 'true',
-                'doc_id': '24852649951017035',
-            }
-            proxies = get_random_proxy()
-            proxy = proxies['http']
-            proxy_ip = proxy.split(':')[-2].split('@')[-1]
-            print(f'Выбран прокси {proxy_ip}')
-            response = requests.post(endpoint, proxies=proxies, headers=headers, data=data)
-            if response.status_code == 200:
-                try:
-                    response_json = response.json()
-                    return response_json
-                except Exception as e:
-                    print(f'* * * Ошибка получения json из ответа: {e}')
-                    return False
-            elif response.status_code == 401:
-                print(f'* * * Ошибка, требуется авторизация, возможно прокси забанен, статус код: {response.status_code}')
-                proxy_waiting_list.append(proxy)
-                proxy_list.remove(proxy)
-                print(f'Прокси {proxy_ip} исключен из списка доступныз прокси и добавлен в список ожидания')
-                return False
-            else:
-                print(f'* * * Ошибка получения ответа, статус код: {response.status_code}')
-                return False
-        except Exception as e:
-            print(f'* * * Ошибка получения shortcode из ссылки: {e}')
-            return False
+    headers = {
+    'accept': '*/*',
+    'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',
+    'content-type': 'application/x-www-form-urlencoded',
+    'dpr': '2',
+    'origin': 'https://www.instagram.com',
+    'referer': f'{url}',
+    'sec-ch-prefers-color-scheme': 'dark',
+    'sec-ch-ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
+    'sec-ch-ua-full-version-list': '"Google Chrome";v="123.0.6312.58", "Not:A-Brand";v="8.0.0.0", "Chromium";v="123.0.6312.58"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-model': '""',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-ch-ua-platform-version': '"14.2.0"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+    'viewport-width': '830',
+    'x-asbd-id': '129477',
+    'x-bloks-version-id': '2c91cd96c82784f84faaa4f7ee527407cd84c826a2d53f6e3ab87e8e69502b86',
+    'x-csrftoken': 'h9WVZwuIpfEKXZ0hdqgFqeLJglBGP6WO',
+    'x-fb-friendly-name': 'PolarisPostActionLoadPostQueryQuery',
+    'x-fb-lsd': 'AVqCy1FViKw',
+    'x-ig-app-id': '936619743392459',
+    }
+    data = {
+        'av': '0',
+        '__d': 'www',
+        '__user': '0',
+        '__a': '1',
+        '__req': '5',
+        '__hs': '19827.HYP:instagram_web_pkg.2.1..0.0',
+        'dpr': '2',
+        '__ccg': 'UNKNOWN',
+        '__rev': '1012773657',
+        '__s': '::027l1c',
+        # '__hsi': '7357850965805043412',
+        # '__dyn': '7xeUjG1mxu1syUbFp40NonwgU29zEdF8aUco2qwJw5ux609vCwjE1xoswaq0yE7i0n24oaEd86a3a1YwBgao6C0Mo2iyo2Ixe0EUjwGzEaE7622362W2K0zK5o4q3y1Sx-0iS2Sq2-azo7u1xwIwbS1LwTwKG1pg2Xwr86C1mwrd6goK68jxe6V89F8uxK3Oq',
+        # '__csr': 'g8iNcn8ADiHquDbQWpqJkKil8F4_yt4V-XhbJeKezqBDLV8zxiuqaDhHAJeXCBXKiu4VaHxeJprUx2qgGaFBjzkXLBx1osh8Cifz_ybperz9ESvzVrGWy8lyVqgy74GwzCw05iXa5E4S1rw23oG4JwBg0c69VQajpE4C2Czj0befg0UC0cJCkM0gg8it2E11EO00wH80VC',
+        '__comet_req': '7',
+        'lsd': 'AVqCy1FViKw',
+        'jazoest': '2956',
+        '__spin_r': '1012773657',
+        '__spin_b': 'trunk',
+        '__spin_t': '1713133176',
+        'fb_api_caller_class': 'RelayModern',
+        'fb_api_req_friendly_name': 'PolarisPostActionLoadPostQueryQuery',
+        'variables': f'{{"shortcode":"{shortcode}","fetch_comment_count":40,"parent_comment_count":24,"child_comment_count":3,"fetch_like_count":10,"fetch_tagged_user_count":null,"fetch_preview_comment_count":2,"has_threaded_comments":true,"hoisted_comment_id":null,"hoisted_reply_id":null}}',
+        'server_timestamps': 'true',
+        'doc_id': '24852649951017035',
+    }
+    response = requests.post(endpoint, proxies=proxies, headers=headers, data=data)
+    if response.status_code == 200:
+        return True
     else:
-        print(f'* * * Ссылка непраильная (не Reel)')
         return False
 
+
 def main():
+    live_proxy_list = []
+    dead_proxy_list = []
+
     success_count = fail_count = 0
     count = 1
     time_start = datetime.now()
-    while (datetime.now() - time_start) < timedelta(minutes=60):
-    # for count in range(1, 101):
-        print(f'Time Delta: {datetime.now() - time_start}')
+    for proxy in proxy_list:
+        time_delta = datetime.now() - time_start
         url = random.choice(urls)
         shortcode = url.split('/reel/')[1].split('/')[0]
-        interval = random.randint(1, 10)
-        json_data = send_request_for_reel(shortcode)
-        if json_data:
-            video_url = json_data['data']['xdt_shortcode_media']['video_url']
-            print(f'{count}. Ссылка {video_url[:50]} получена удачно. Ждем {interval} сек.')
+        interval = random.randint(1, 5)
+        proxies = {
+            'http': proxy,
+            'https': proxy,
+        }
+        proxy = proxies['http']
+        proxy_ip = proxy.split(':')[-2].split('@')[-1]
+
+        result = send_request_for_reel(shortcode, proxies)
+
+        if result:
+            print(f'{count}. Прокси {proxy_ip} работает. Прошло {time_delta} сек. Ждем {interval} сек.')
+            live_proxy_list.append(proxy)
             sleep(interval)
             success_count += 1
             count += 1
         else:
-            print(f'{count}. Ссылка не получена. Ждем {interval} сек.')
+            print(f'{count}. Прокси {proxy_ip} забанен. Прошло {time_delta} сек. Ждем {interval} сек.')
+            dead_proxy_list.append(proxy)
             sleep(interval)
             fail_count += 1
             count += 1
 
     print(f'Удачных: {success_count} Неудачных: {fail_count}')
-    print(f'Список живых прокси: {proxy_list}')
-    print(f'Список ожидаемых прокси: {proxy_waiting_list}')
+    live_proxy_list = [proxy.split(':')[-2].split('@')[-1] for proxy in live_proxy_list]
+    dead_proxy_list = [proxy.split(':')[-2].split('@')[-1] for proxy in dead_proxy_list]
+    print(f'Список живых прокси: {live_proxy_list}')
+    print(f'Список мертвых прокси: {dead_proxy_list}')
 
 
 if __name__ == '__main__':

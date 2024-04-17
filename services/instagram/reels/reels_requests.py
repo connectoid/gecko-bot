@@ -4,6 +4,7 @@ from datetime import datetime
 from pprint import pprint
 
 from utils.utils import save_json
+from config_data.config import proxy_list
 
 urls = [
     'https://www.instagram.com/reel/C5lwbPYIzMs/?igsh=MTNiNml5bGV2aXk3ZA==',
@@ -19,19 +20,6 @@ urls = [
     'https://www.instagram.com/reel/C4pOp6LoWOA/?igsh=MTU0NnIzNWdpdGVwZg==',
 ]
 
-
-proxy_list = [
-    'http://LJ64PB:2FeTxb@94.131.19.56:9701',
-    'http://LJ64PB:2FeTxb@95.164.201.179:9911',
-    'http://LJ64PB:2FeTxb@95.164.202.85:9327',
-    'http://LJ64PB:2FeTxb@94.131.54.35:9085',
-    'http://LJ64PB:2FeTxb@186.179.61.133:9579',
-    'http://LJ64PB:2FeTxb@91.218.50.161:9997',
-    'http://LJ64PB:2FeTxb@38.153.57.53:9190',
-    'http://LJ64PB:2FeTxb@38.152.246.128:9310',
-    'http://LJ64PB:2FeTxb@94.131.87.20:9548',
-    'http://LJ64PB:2FeTxb@94.131.89.115:9108',
-]
 
 def get_random_proxy():
     proxy = random.choice(proxy_list)
