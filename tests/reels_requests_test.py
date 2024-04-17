@@ -1,6 +1,8 @@
 import requests
 import random
 from time import sleep
+from datetime import datetime
+from datetime import timedelta
 
 
 urls = [
@@ -178,20 +180,26 @@ def send_request_for_reel(shortcode):
 
 def main():
     success_count = fail_count = 0
-    for count in range(1, 101):
+    time_start = datetime.now()
+    while (datetime.now() - time_start) < timedelta(minutes=60):
+    # for count in range(1, 101):
+        print(f'Time Delta: {datetime.now() - time_start}')
+        count = 1
         url = random.choice(urls)
         shortcode = url.split('/reel/')[1].split('/')[0]
-        interval = random.randint(1, 2)
+        interval = random.randint(1, 10)
         json_data = send_request_for_reel(shortcode)
-        video_url = json_data['data']['xdt_shortcode_media']['video_url']
         if json_data:
+            video_url = json_data['data']['xdt_shortcode_media']['video_url']
             print(f'{count}. Ссылка {video_url[:50]} получена удачно. Ждем {interval} сек.')
             sleep(interval)
             success_count += 1
+            count += 1
         else:
             print(f'{count}. Ссылка не получена. Ждем {interval} сек.')
             sleep(interval)
             fail_count += 1
+            count += 1
 
     print(f'Удачных: {success_count} Неудачных: {fail_count}')
     print(f'Список живых прокси: {proxy_list}')
