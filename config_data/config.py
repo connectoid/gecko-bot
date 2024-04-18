@@ -13,6 +13,33 @@ proxy_list = [
     'http://LJ64PB:2FeTxb@94.131.87.20:9548',
     # 'http://LJ64PB:2FeTxb@94.131.89.115:9108',
 
+    # Holland
+    'http://0P7hy1:gQwmN3@91.216.186.243:8000', 
+    'http://0P7hy1:gQwmN3@91.216.186.52:8000',
+    # Poland
+    'http://nmjXXw:C3FhBp@185.77.139.24:8000',
+    'http://nmjXXw:C3FhBp@185.77.139.213:8000',
+    # USA
+    'http://TNRBbV:qKF1Ar@168.181.54.57:8000:',
+]
+
+
+proxy_list_all = [
+    'http://LJ64PB:2FeTxb@94.131.19.56:9701',
+    'http://LJ64PB:2FeTxb@95.164.201.179:9911',
+    'http://LJ64PB:2FeTxb@95.164.202.85:9327',
+    'http://LJ64PB:2FeTxb@94.131.54.35:9085',
+    'http://LJ64PB:2FeTxb@186.179.61.133:9579',
+    'http://LJ64PB:2FeTxb@91.218.50.161:9997',
+    'http://LJ64PB:2FeTxb@38.153.57.53:9190',
+    'http://LJ64PB:2FeTxb@38.152.246.128:9310',
+    'http://LJ64PB:2FeTxb@94.131.87.20:9548',
+    'http://LJ64PB:2FeTxb@94.131.89.115:9108',
+    'http://0P7hy1:gQwmN3@91.216.186.243:8000', 
+    'http://0P7hy1:gQwmN3@91.216.186.52:8000',
+    'http://nmjXXw:C3FhBp@185.77.139.24:8000',
+    'http://nmjXXw:C3FhBp@185.77.139.213:8000',
+    'http://TNRBbV:qKF1Ar@168.181.54.57:8000:',
 ]
 
 

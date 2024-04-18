@@ -4,8 +4,23 @@ from time import sleep
 from datetime import datetime
 from datetime import timedelta
 
-from config_data.config import proxy_list
+from cookies.example import cookies
+from config_data.config import proxy_list, proxy_list_all
 
+
+proxy_list_all = [
+    'http://LJ64PB:2FeTxb@94.131.19.56:9701',
+    'http://LJ64PB:2FeTxb@95.164.201.179:9911',
+    'http://LJ64PB:2FeTxb@95.164.202.85:9327',
+    'http://LJ64PB:2FeTxb@94.131.54.35:9085',
+    'http://LJ64PB:2FeTxb@186.179.61.133:9579',
+    'http://LJ64PB:2FeTxb@91.218.50.161:9997',
+    'http://LJ64PB:2FeTxb@38.153.57.53:9190',
+    'http://LJ64PB:2FeTxb@38.152.246.128:9310',
+    'http://LJ64PB:2FeTxb@94.131.87.20:9548',
+    'http://LJ64PB:2FeTxb@94.131.89.115:9108',
+
+]
 
 urls = [
     'https://www.instagram.com/reel/C5lwbPYIzMs/?igsh=MTNiNml5bGV2aXk3ZA==',
@@ -149,7 +164,7 @@ def main():
     success_count = fail_count = 0
     count = 1
     time_start = datetime.now()
-    for proxy in proxy_list:
+    for proxy in proxy_list_all:
         time_delta = datetime.now() - time_start
         url = random.choice(urls)
         shortcode = url.split('/reel/')[1].split('/')[0]
@@ -181,6 +196,9 @@ def main():
     dead_proxy_list = [proxy.split(':')[-2].split('@')[-1] for proxy in dead_proxy_list]
     print(f'Список живых прокси: {live_proxy_list}')
     print(f'Список мертвых прокси: {dead_proxy_list}')
+
+
+
 
 
 if __name__ == '__main__':
