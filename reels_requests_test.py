@@ -3,6 +3,9 @@ import random
 from time import sleep
 from datetime import datetime
 from datetime import timedelta
+import string
+
+from fake_useragent import UserAgent
 
 from config_data.config import proxy_list
 
@@ -70,9 +73,10 @@ urls = [
     'https://www.instagram.com/reel/C4-0liRMD0B/?igsh=N3c4Nzg5amx5bXRr',
 ]
 
-
 proxy_waiting_list = []
 
+ua = UserAgent()
+ 
 def get_random_proxy():
     proxy = random.choice(proxy_list)
     proxies = {
@@ -81,12 +85,29 @@ def get_random_proxy():
     }
     return proxies
 
+def generate_random_integer(digits):
+    min_value = 10  **  (digits - 1)
+    max_value = (10  **  digits) - 1
+    random_number = random.randint(min_value, max_value)
+    return random_number
+
+def generate_random_string(length):
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choice(characters) for _ in range(length))
+    return random_string
+
+
 def send_request_for_reel(shortcode):
     endpoint = 'https://www.instagram.com/graphql/query'
     url = f'https://www.instagram.com/reel/{shortcode}/'
+    x_ig_app_id = generate_random_integer(15)
+    x_fb_lsd = generate_random_string(11)
+    __spin_r = generate_random_integer(10)
+    __spin_t = generate_random_integer(10)
+    user_agent = ua.random
+    print(user_agent)
     if 'reel' in url:
         try:
-            # print(shortcode)
             headers = {
             'accept': '*/*',
             'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',
@@ -94,24 +115,25 @@ def send_request_for_reel(shortcode):
             'dpr': '2',
             'origin': 'https://www.instagram.com',
             'referer': f'{url}',
-            'sec-ch-prefers-color-scheme': 'dark',
-            'sec-ch-ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
-            'sec-ch-ua-full-version-list': '"Google Chrome";v="123.0.6312.58", "Not:A-Brand";v="8.0.0.0", "Chromium";v="123.0.6312.58"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-model': '""',
-            'sec-ch-ua-platform': '"macOS"',
-            'sec-ch-ua-platform-version': '"14.2.0"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-origin',
-            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+            # 'sec-ch-prefers-color-scheme': 'dark',
+            # 'sec-ch-ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
+            # 'sec-ch-ua-full-version-list': '"Google Chrome";v="123.0.6312.58", "Not:A-Brand";v="8.0.0.0", "Chromium";v="123.0.6312.58"',
+            # 'sec-ch-ua-mobile': '?0',
+            # 'sec-ch-ua-model': '""',
+            # 'sec-ch-ua-platform': '"macOS"',
+            # 'sec-ch-ua-platform-version': '"14.2.0"',
+            # 'sec-fetch-dest': 'empty',
+            # 'sec-fetch-mode': 'cors',
+            # 'sec-fetch-site': 'same-origin',
+            # 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+            'user-agent': f'{user_agent}',
             'viewport-width': '830',
             'x-asbd-id': '129477',
-            'x-bloks-version-id': '2c91cd96c82784f84faaa4f7ee527407cd84c826a2d53f6e3ab87e8e69502b86',
+            # 'x-bloks-version-id': '2c91cd96c82784f84faaa4f7ee527407cd84c826a2d53f6e3ab87e8e69502b86',
             'x-csrftoken': 'h9WVZwuIpfEKXZ0hdqgFqeLJglBGP6WO',
             'x-fb-friendly-name': 'PolarisPostActionLoadPostQueryQuery',
-            'x-fb-lsd': 'AVqCy1FViKw',
-            'x-ig-app-id': '936619743392459',
+            'x-fb-lsd': f'{x_fb_lsd}',
+            'x-ig-app-id': f'{x_ig_app_id}',
             }
             data = {
                 'av': '0',
@@ -122,17 +144,17 @@ def send_request_for_reel(shortcode):
                 '__hs': '19827.HYP:instagram_web_pkg.2.1..0.0',
                 'dpr': '2',
                 '__ccg': 'UNKNOWN',
-                '__rev': '1012773657',
+                '__rev': f'{__spin_r}',
                 '__s': '::027l1c',
                 # '__hsi': '7357850965805043412',
                 # '__dyn': '7xeUjG1mxu1syUbFp40NonwgU29zEdF8aUco2qwJw5ux609vCwjE1xoswaq0yE7i0n24oaEd86a3a1YwBgao6C0Mo2iyo2Ixe0EUjwGzEaE7622362W2K0zK5o4q3y1Sx-0iS2Sq2-azo7u1xwIwbS1LwTwKG1pg2Xwr86C1mwrd6goK68jxe6V89F8uxK3Oq',
                 # '__csr': 'g8iNcn8ADiHquDbQWpqJkKil8F4_yt4V-XhbJeKezqBDLV8zxiuqaDhHAJeXCBXKiu4VaHxeJprUx2qgGaFBjzkXLBx1osh8Cifz_ybperz9ESvzVrGWy8lyVqgy74GwzCw05iXa5E4S1rw23oG4JwBg0c69VQajpE4C2Czj0befg0UC0cJCkM0gg8it2E11EO00wH80VC',
                 '__comet_req': '7',
-                'lsd': 'AVqCy1FViKw',
+                'lsd': f'{x_fb_lsd}',
                 'jazoest': '2956',
-                '__spin_r': '1012773657',
+                '__spin_r': f'{__spin_r}',
                 '__spin_b': 'trunk',
-                '__spin_t': '1713133176',
+                '__spin_t': f'{__spin_t}',
                 'fb_api_caller_class': 'RelayModern',
                 'fb_api_req_friendly_name': 'PolarisPostActionLoadPostQueryQuery',
                 'variables': f'{{"shortcode":"{shortcode}","fetch_comment_count":40,"parent_comment_count":24,"child_comment_count":3,"fetch_like_count":10,"fetch_tagged_user_count":null,"fetch_preview_comment_count":2,"has_threaded_comments":true,"hoisted_comment_id":null,"hoisted_reply_id":null}}',
@@ -176,7 +198,7 @@ def main():
         print(f'Time Delta: {datetime.now() - time_start}')
         url = random.choice(urls)
         shortcode = url.split('/reel/')[1].split('/')[0]
-        interval = random.randint(1, 10)
+        interval = random.randint(3, 10)
         json_data = send_request_for_reel(shortcode)
         if json_data:
             video_url = json_data['data']['xdt_shortcode_media']['video_url']
