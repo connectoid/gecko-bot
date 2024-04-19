@@ -62,7 +62,7 @@ async def content_stories_requested(message: Message):
     author = f'@{author}'
     print(f'Stories requested {url}')
     print(message.chat.id)
-    stories_urls = get_stories_single(url)
+    stories_urls = get_stories(url)
     if stories_urls:
         for story_url in stories_urls:
             await bot.send_video(

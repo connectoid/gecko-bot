@@ -78,7 +78,7 @@ def get_stories_single(url):
     if response.status_code == 200:
         # source = html.unescape(response.text)
         json_source = response.json()
-        # save_json(json_source)
+        save_json(json_source)
         try:
             html_data = json_source['data']
             unesqaped_html_data = html.unescape(html_data)
@@ -86,7 +86,9 @@ def get_stories_single(url):
             soup = BeautifulSoup(unesqaped_html_data, 'lxml')
             downloads_ul = soup.find('ul', class_='download-box')
             download_divs = downloads_ul.find_all('div', class_='download-items__btn')
+            print(download_links)
             download_divs = [div for div in download_divs if story_id in str(div)]
+            print(download_links)
             download_links = [div.find('a')['href'] for div in download_divs]
             return download_links
         except Exception as e:
