@@ -17,7 +17,7 @@ proxy_list = [
     'http://0P7hy1:gQwmN3@91.216.186.52:8000',
     'http://nmjXXw:C3FhBp@185.77.139.24:8000',
     'http://nmjXXw:C3FhBp@185.77.139.213:8000',
-    'http://TNRBbV:qKF1Ar@168.181.54.57:8000:',
+    'http://TNRBbV:qKF1Ar@168.181.54.57:8000',
 ]
 
 

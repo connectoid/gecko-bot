@@ -25,6 +25,8 @@ from services.instagram.reels.reels_instagrapi import get_video_instagrapi
 from services.instagram.reels.reels_selenium import get_video_selenium
 from services.instagram.reels.reels_hikerapi import get_video_hikerapi
 from services.instagram.stories.stories_requests import get_stories
+from services.instagram.stories.stories_single_requests import get_stories_single
+
 
 storage = MemoryStorage()
 router = Router()
@@ -60,7 +62,7 @@ async def content_stories_requested(message: Message):
     author = f'@{author}'
     print(f'Stories requested {url}')
     print(message.chat.id)
-    stories_urls = get_stories(url)
+    stories_urls = get_stories_single(url)
     if stories_urls:
         for story_url in stories_urls:
             await bot.send_video(
@@ -68,7 +70,7 @@ async def content_stories_requested(message: Message):
                 video=story_url,
                 caption=author)
         time_end = datetime.now()
-        await message.answer(text=f'Время на получение всех Stories: {time_end - time_start}')
+        await message.answer(text=f'Время на получение Stories: {time_end - time_start}')
     else:
         await message.answer(text='Ошибка получения Stories, см. логи.')
 
