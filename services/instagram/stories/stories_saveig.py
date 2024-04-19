@@ -45,7 +45,7 @@ def save_json(response, file='data.json'):
         json.dump(response, f, ensure_ascii=False)
 
 
-def get_stories(url):
+def get_stories_saveig(url):
     headers = {
     'accept': '*/*',
     'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',

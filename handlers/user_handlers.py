@@ -24,8 +24,8 @@ from services.instagram.reels.reels_requests import get_video_requests
 from services.instagram.reels.reels_instagrapi import get_video_instagrapi
 from services.instagram.reels.reels_selenium import get_video_selenium
 from services.instagram.reels.reels_hikerapi import get_video_hikerapi
-from services.instagram.stories.stories_requests import get_stories
-from services.instagram.stories.stories_single_requests import get_stories_single
+from services.instagram.stories.stories_saveig import get_stories_saveig
+from services.instagram.stories.stories_ss import get_stories_ss
 
 
 storage = MemoryStorage()
@@ -54,6 +54,27 @@ async def content_reels_requested(message: Message):
                          reply_markup=create_bottom_keyboard(methods_buttons, shortcode))
     
 
+# @router.message(F.text.contains('instagram.com/stories/'))
+# async def content_stories_requested(message: Message):
+#     time_start = datetime.now()
+#     url = message.text
+#     author = url.split('/stories/')[-1].split('/')[0]
+#     author = f'@{author}'
+#     print(f'Stories requested {url}')
+#     print(message.chat.id)
+#     stories_urls = get_stories_saveig(url)
+#     if stories_urls:
+#         for story_url in stories_urls:
+#             await bot.send_video(
+#                 message.chat.id,
+#                 video=story_url,
+#                 caption=author)
+#         time_end = datetime.now()
+#         await message.answer(text=f'Время на получение Stories: {time_end - time_start}')
+#     else:
+#         await message.answer(text='Ошибка получения Stories, см. логи.')
+
+
 @router.message(F.text.contains('instagram.com/stories/'))
 async def content_stories_requested(message: Message):
     time_start = datetime.now()
@@ -62,17 +83,17 @@ async def content_stories_requested(message: Message):
     author = f'@{author}'
     print(f'Stories requested {url}')
     print(message.chat.id)
-    stories_urls = get_stories(url)
-    if stories_urls:
-        for story_url in stories_urls:
-            await bot.send_video(
-                message.chat.id,
-                video=story_url,
-                caption=author)
+    story_url = get_stories_ss(url)
+    if story_url:
+        await bot.send_video(
+            message.chat.id,
+            video=story_url,
+            caption=author)
         time_end = datetime.now()
         await message.answer(text=f'Время на получение Stories: {time_end - time_start}')
     else:
-        await message.answer(text='Ошибка получения Stories, см. логи.')
+        await message.answer(text='Ошибка получения Stories (овзможно приватный Stories), см. логи.')
+
 
 @router.callback_query(Text(startswith='selenium'))
 async def process_selenium_method(callback: CallbackQuery, bot: Bot):
