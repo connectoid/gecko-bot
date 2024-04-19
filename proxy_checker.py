@@ -150,7 +150,7 @@ def main():
     success_count = fail_count = 0
     count = 1
     time_start = datetime.now()
-    for proxy in proxy_list_all:
+    for proxy in proxy_list:
         time_delta = datetime.now() - time_start
         url = random.choice(urls)
         shortcode = url.split('/reel/')[1].split('/')[0]
