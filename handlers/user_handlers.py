@@ -88,7 +88,7 @@ async def content_stories_requested(message: Message):
     print(url)
     print(message.chat.id)
     author = url.split('/stories/')[-1].split('/')[0]
-    url = author + url.split(author)[-1].split('?igsh=')[0]
+    url = author + url.split(author)[-1].split('?')[0]
     print(len(url))
     print(url)
     await message.answer(text='Выберите метод получения ссылки на видео',
@@ -112,7 +112,7 @@ async def process_hikerapi_method(callback: CallbackQuery, bot: Bot):
         #     video=story_url,
         #     caption=author)
         time_end = datetime.now()
-        await callback.message.answer(text=f'Время на получение Stories: {time_end - time_start}')
+        await callback.message.answer(text=f'Время на получение ссылки {stories_url} на видео: {time_end - time_start}')
     else:
         await callback.message.answer(text='Ошибка получения Stories (овзможно приватный Stories), см. логи.')
 
