@@ -26,6 +26,7 @@ from services.instagram.reels.reels_selenium import get_video_selenium
 from services.instagram.reels.reels_hikerapi import get_video_hikerapi
 from services.instagram.stories.stories_saveig import get_stories_saveig
 from services.instagram.stories.stories_ss import get_stories_ss
+from services.instagram.stories.stories_hikerapi import get_story_hikerapi
 
 
 storage = MemoryStorage()
@@ -35,10 +36,15 @@ config: Config = load_config()
 lang = 'ru'
 switch_reporting = True
 
-methods_buttons = [
-    'requests',
-    'video-requests',
-    'hikerAPI',
+reels_methods_buttons = [
+    'Reels requests',
+    'Reels video-requests',
+    'Reels hikerAPI',
+]
+
+stories_methods_buttons = [
+    'Stroies ssinstagram',
+    'Stories hikerAPI',
 ]
 
 config: Config = load_config()
@@ -51,7 +57,7 @@ async def content_reels_requested(message: Message):
     print(message.chat.id)
     shortcode = url.split('/reel/')[1].split('/')[0]
     await message.answer(text='Выберите метод получения ссылки на видео',
-                         reply_markup=create_bottom_keyboard(methods_buttons, shortcode))
+                         reply_markup=create_bottom_keyboard(reels_methods_buttons, shortcode))
     
 
 # @router.message(F.text.contains('instagram.com/stories/'))
@@ -74,25 +80,68 @@ async def content_reels_requested(message: Message):
 #     else:
 #         await message.answer(text='Ошибка получения Stories, см. логи.')
 
+# https://www.instagram.com/stories/kaliningradru/3348976386265680364?igsh=MTZ3ZzhsM2d3YTNudQ==
 
 @router.message(F.text.contains('instagram.com/stories/'))
 async def content_stories_requested(message: Message):
-    time_start = datetime.now()
     url = message.text
+    print(url)
+    print(message.chat.id)
+    author = url.split('/stories/')[-1].split('/')[0]
+    url = author + url.split(author)[-1].split('?igsh=')[0]
+    print(len(url))
+    print(url)
+    await message.answer(text='Выберите метод получения ссылки на видео',
+                         reply_markup=create_bottom_keyboard(stories_methods_buttons, url))
+
+
+@router.callback_query(Text(startswith='Stroies ssinstagram'))
+async def process_hikerapi_method(callback: CallbackQuery, bot: Bot):
+    time_start = datetime.now()
+    url = callback.data.split(' ')[-1]
+    url = 'https://www.instagram.com/stories/' + url
+    print(url)
     author = url.split('/stories/')[-1].split('/')[0]
     author = f'@{author}'
     print(f'Stories requested {url}')
-    print(message.chat.id)
+    print(callback.message.chat.id)
     story_url = get_stories_ss(url)
     if story_url:
         await bot.send_video(
-            message.chat.id,
+            callback.message.chat.id,
             video=story_url,
             caption=author)
         time_end = datetime.now()
-        await message.answer(text=f'Время на получение Stories: {time_end - time_start}')
+        await callback.message.answer(text=f'Время на получение Stories: {time_end - time_start}')
     else:
-        await message.answer(text='Ошибка получения Stories (овзможно приватный Stories), см. логи.')
+        await callback.message.answer(text='Ошибка получения Stories (овзможно приватный Stories), см. логи.')
+
+
+
+@router.callback_query(Text(startswith='Stories hikerAPI'))
+async def process_hikerapi_method(callback: CallbackQuery, bot: Bot):
+    time_start = datetime.now()
+    url = callback.data.split(' ')[-1]
+    url = 'https://www.instagram.com/stories/' + url
+    author = url.split('/stories/')[-1].split('/')[0]
+    author = f'@{author}'
+    print(url)
+    stories_url = get_story_hikerapi(url)
+    if stories_url:
+        stories_url = stories_url[:50]
+        time_end = datetime.now()
+        print(stories_url)
+        print('Ссылка на видео полуена в Хэндлере')
+        await bot.send_video(
+            callback.message.chat.id,
+            video=stories_url,
+            caption=author
+        )
+        await callback.message.answer(text=f'Время на получение ссылки {stories_url} на видео: {time_end - time_start}')
+    else:
+        print('Ссылка на видео НЕ полуена в Хэндлере')
+        await callback.message.answer(text='Ошибка получения stories (см. логи)')
+
 
 
 @router.callback_query(Text(startswith='selenium'))
@@ -113,7 +162,7 @@ async def process_selenium_method(callback: CallbackQuery, bot: Bot):
         await callback.message.answer(text='Ошибка получения ссылки на видео (см. логи)')
     
 
-@router.callback_query(Text(startswith='requests'))
+@router.callback_query(Text(startswith='Reels requests'))
 async def process_requests_method(callback: CallbackQuery, bot: Bot):
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
@@ -131,7 +180,7 @@ async def process_requests_method(callback: CallbackQuery, bot: Bot):
         await callback.message.answer(text='Ошибка получения ссылки на видео (см. логи)')
 
 
-@router.callback_query(Text(startswith='video-requests'))
+@router.callback_query(Text(startswith='Reels video-requests'))
 async def process_requests_videos_method(callback: CallbackQuery, bot: Bot):
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
@@ -150,7 +199,7 @@ async def process_requests_videos_method(callback: CallbackQuery, bot: Bot):
         await callback.message.answer(text='Ошибка получения ссылки на видео (см. логи)')
 
 
-@router.callback_query(Text(startswith='instagrapi'))
+@router.callback_query(Text(startswith='Reels instagrapi'))
 async def process_instagrapi_method(callback: CallbackQuery, bot: Bot):
     await callback.message.answer(text='Дождитесь ответа, не отправляйте следующую ссылку пока не прийдет ответ')
     time_start = datetime.now()
@@ -169,7 +218,7 @@ async def process_instagrapi_method(callback: CallbackQuery, bot: Bot):
         await callback.message.answer(text='Ошибка получения ссылки на видео (login_required)')
 
 
-@router.callback_query(Text(startswith='hikerAPI'))
+@router.callback_query(Text(startswith='Reels hikerAPI'))
 async def process_hikerapi_method(callback: CallbackQuery, bot: Bot):
     time_start = datetime.now()
     shortcode = callback.data.split(' ')[-1]
