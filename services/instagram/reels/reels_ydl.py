@@ -102,15 +102,15 @@ def get_random_proxy():
 
 
 def download(video_url, message):
-    proxies = get_random_proxy()
-    print(proxies)
+    proxy = get_random_proxy()
+    print(proxy)
     cookiefile = random.choice(os.listdir('cookies'))
     print(cookiefile)
     random_string = str(random.randint(1, 100000))
     video_url = escape_url(sanitize_url(video_url))
     ydl_opts = {
-        'cookiefile': f'{cookiefile}',
-        'proxy': f'{proxies}',
+        'cookiefile': f'cookies/{cookiefile}',
+        'proxy': f'{proxy}',
         'restrictfilenames': 'true',
         'format': f'bestvideo[height<=1280][vcodec^=avc][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
         'outtmpl': f'%(id)s{random_string}.%(ext)s',
