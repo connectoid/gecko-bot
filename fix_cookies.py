@@ -12,7 +12,7 @@ def replace_tabs_with_spaces(directory):
                 content = f.read()
             
             # Заменяем все символы табуляции на пробелы
-            content = re.sub('\t', ' ', content)
+            content = re.sub(' ', '\t', content)
             
             with open(f'{directory}/{file}', 'w') as f:
                 f.write(content)
