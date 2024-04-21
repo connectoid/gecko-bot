@@ -132,11 +132,11 @@ async def process_hikerapi_method(callback: CallbackQuery, bot: Bot):
         time_end = datetime.now()
         print(stories_url)
         print('Ссылка на видео полуена в Хэндлере')
-        await bot.send_video(
-            callback.message.chat.id,
-            video=stories_url,
-            caption=author
-        )
+        # await bot.send_video(
+        #     callback.message.chat.id,
+        #     video=stories_url,
+        #     caption=author
+        # )
         await callback.message.answer(text=f'Время на получение ссылки {stories_url} на видео: {time_end - time_start}')
     else:
         print('Ссылка на видео НЕ полуена в Хэндлере')
