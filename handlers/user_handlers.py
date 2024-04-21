@@ -112,6 +112,7 @@ async def process_hikerapi_method(callback: CallbackQuery, bot: Bot):
         #     video=story_url,
         #     caption=author)
         time_end = datetime.now()
+        story_url = story_url[:50]
         await callback.message.answer(text=f'Время на получение ссылки {story_url} на видео: {time_end - time_start}')
     else:
         await callback.message.answer(text='Ошибка получения Stories (овзможно приватный Stories), см. логи.')
