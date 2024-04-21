@@ -107,11 +107,11 @@ async def process_hikerapi_method(callback: CallbackQuery, bot: Bot):
     print(callback.message.chat.id)
     story_url = get_stories_ss(url)
     if story_url:
-        await bot.send_video(
-            callback.message.chat.id,
-            video=story_url,
-            caption=author)
-        time_end = datetime.now()
+        # await bot.send_video(
+        #     callback.message.chat.id,
+        #     video=story_url,
+        #     caption=author)
+        # time_end = datetime.now()
         await callback.message.answer(text=f'Время на получение Stories: {time_end - time_start}')
     else:
         await callback.message.answer(text='Ошибка получения Stories (овзможно приватный Stories), см. логи.')
